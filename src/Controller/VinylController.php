@@ -29,7 +29,7 @@ class VinylController extends AbstractController
             'title' => 'Pb & Jams',
             'tracks' => $tracks,
         ]);
-			dd($html);
+			return new Response($html);
     }
 
     #[Route('/browse/{slug}')]
