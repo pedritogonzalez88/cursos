@@ -29,18 +29,42 @@ class VinylController extends AbstractController
             'title' => 'Pb & Jams',
             'tracks' => $tracks,
         ]);
-			dd($html);
+			return new Response($html);
     }
 
-    #[Route('/browse/{slug}')]
+    #[Route('/browse/{slug}', name: 'app_browse')]
     public function browser(string $slug = null) : Response
     {
-        if($slug){
-            $title = 'Genre'.u(str_replace('_', ' ', $slug))->title(true);
-        }else{
-            $title = 'All Genres';
-        }
-
-        return new Response($title);
+		$genre = $slug ? u(str_replace('-',' ', $slug))->title(true) : null;
+		$mixes = $this->getMixes();
+		
+		
+		return $this->render('vinyl/browse.html.twig', [
+			'genre' => $genre,
+			'mixes' => $mixes,
+		]);
     }
+	public function getMixes() : array
+	{
+		return [
+			[
+				'title' => 'PB & Jams',
+				'trackCount' => 14,
+				'genre' => 'Rock',
+				'createdAt' => new \DateTime('2021-10-02'),
+			],
+			[
+				'title' => 'Put a Hex on your Ex',
+				'trackCount' => 8,
+				'genre' => 'Heavy Metal',
+				'createdAt' => new \DateTime('2022-04-28'),
+			],
+			[
+				'title' => 'Spice Grills - Summer Tunes',
+				'trackCount' => 10,
+				'genre' => 'Pop',
+				'createdAt' => new \DateTime('2019-06-20'),
+			],
+		];
+	}
 }
